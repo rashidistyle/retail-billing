@@ -1,0 +1,33 @@
+ <!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Billing App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="checkLogin()">
+
+  <div class="container">
+    <h2>🧾 Create Bill</h2>
+    
+    <input type="text" id="customer" placeholder="Customer Name">
+    <input type="number" id="amount" placeholder="Amount ₹">
+    
+    <button onclick="generateBill()">Generate Bill</button>
+    
+    <div id="billResult"></div>
+
+    <h3>💰 Upgrade to Premium</h3>
+    <img src="GooglePay_QR.png" width="200"><br><br>
+    
+    <a href="upi://pay?pa=salmanrashidi658@oksbi&pn=BillingApp&am=199&cu=INR">
+      <button>Pay ₹199 via UPI</button>
+    </a>
+    
+    <button onclick="markAsPremium()">I have paid</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+ 

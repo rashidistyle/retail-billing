@@ -1,0 +1,38 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>Retailer Billing - Login</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 100px; }
+    input { margin: 10px; padding: 8px; width: 200px; }
+    button { padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h2>🔐 Login to Your Billing Account</h2>
+
+  <input id="username" placeholder="Username"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+
+  <script>
+    // Auto-redirect if already logged in
+    if (localStorage.getItem("loggedIn") === "true") {
+      window.location.href = "dashboard.html";
+    }
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Simple fixed admin credentials
+      if (username === "admin" && password === "1234") {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "dashboard.html";
+      } else {
+        alert("❌ Invalid credentials");
+      }
+    }
+  </script>
+</body>
+</html>

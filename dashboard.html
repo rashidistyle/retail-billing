@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Retailer Billing Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
+    input, button { padding: 10px; margin: 10px; font-size: 16px; }
+    ul { text-align: left; margin: 20px auto; width: 50%; }
+    #billResult { border: 1px solid #ccc; padding: 15px; margin: 20px; border-radius: 10px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h2>🧾 Retailer Billing Dashboard</h2>
+
+  <input id="customer" placeholder="Customer Name">
+  <input id="amount" placeholder="Amount ₹" type="number">
+  <button onclick="generateBill()">Generate Bill</button>
+
+  <div id="billResult"></div>
+  <hr>
+  <h3>📜 Bill History</h3>
+  <ul id="billHistory"></ul>
+
+  <!-- 💰 Support / Donate Link -->
+  <p><a href="payment.html">💰 Support Us / Donate</a></p>
+
+  <script>
+    function generateBill() {
+      const customer = document.getElementById("customer").value;
+      const amount = document.getElementById("amount").value;
+
+      if (!customer || !amount) {
+        alert("Please enter customer and amount.");
+        return;
+      }
+
+      const date = new Date().toLocaleString();
+      const billText = `🧾 Bill for ${customer}\nAmount: ₹${amount}\nDate: ${date}`;
+      const whatsappURL = `https://wa.me/?text=${encodeURIComponent(billText)}`;
+
+      const bill = `
+        <div id="billToPrint">
+          <h3>🧾 Bill for ${customer}</h3>
+          <p><strong>Amount:</strong> ₹${amount}</p>
+          <p><strong>Date:</strong> ${date}</p>
+        </div>
+        <br>
+        <a href="${whatsappURL}" target="_blank">
+          <button>📱 Share on WhatsApp</button>
+        </a>
+        <button onclick="printBill()">🖨️ Print</button>
+        <button onclick="downloadPDF()">⬇️ Download PDF</button>
+      `;
+
+      document.getElementById("billResult").innerHTML = bill;
+
+      // Save in localStorage
+      saveBillToHistory(customer, amount, date);
+      showBillHistory();
+    }
+
+    function printBill() {
+      const bill = document.getElementById("billToPrint").innerHTML;
+      const win = window.open('', '', 'height=600,width=800');
+      win.document.write('<html><head><title>Bill</title></head><body>');
+      win.document.write(bill);
+      win.document.write('</body></html>');
+      win.document.close();
+      win.print();
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const content = document.getElementById("billToPrint").innerText;
+      doc.text(content, 10, 10);
+      doc.save("bill.pdf");
+    }
+
+    function saveBillToHistory(customer, amount, date) {
+      let history = JSON.parse(localStorage.getItem("bills") || "[]");
+      history.push({ customer, amount, date });
+      localStorage.setItem("bills", JSON.stringify(history));
+    }
+
+    function showBillHistory() {
+      const history = JSON.parse(localStorage.getItem("bills") || "[]");
